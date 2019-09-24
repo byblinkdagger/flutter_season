@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_season/provider/view_state.dart';
+import 'package:oktoast/oktoast.dart';
 import 'http.dart';
 export 'package:dio/dio.dart';
 
@@ -43,6 +44,7 @@ class ApiInterceptor extends InterceptorsWrapper {
         /// 2.在这里统一处理再次解析
         debugPrint('---api-response--->error--not--map---->$response');
         RespData respData = RespData.fromJson(json.decode(response.data));
+        showToast(respData.message);
         return handleFailed(respData);
       }
     }
@@ -56,7 +58,8 @@ class ApiInterceptor extends InterceptorsWrapper {
       // 需要登录
       throw const UnAuthorizedException();
     }
-    return http.reject(respData.message);
+    showToast(respData.message);
+//    return http.reject(respData.message);
   }
 }
 
